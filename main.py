@@ -56,6 +56,7 @@ async def on_ready():
     scheduler.add_job(
         auto_create_poll,
         "cron",
+        day_of_week="sat",
         hour=now.hour,
         minute=(now.minute + 1) % 60
     )
