@@ -1,5 +1,5 @@
 import os
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 
 import discord
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
@@ -56,8 +56,19 @@ async def on_ready():
     scheduler.start()
 
 
+def is_target_week():
+    reference = date(2025, 5, 26)
+    today = date.today()
+    weeks_since = (today - reference).days // 7
+    return weeks_since % 2 == 0
+
+
 # ==== AUTOMATICKÁ ANKETA ====
 async def auto_create_poll():
+    if not is_target_week():
+        print("⏭ Tento týden není cílový (běží jednou za 2 týdny).")
+        return
+
     channel = bot.get_channel(CHANNEL_ID)
     if channel:
         await send_poll(channel)
