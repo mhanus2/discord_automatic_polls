@@ -83,7 +83,7 @@ async def auto_create_poll():
 @bot.tree.command(name="pollnow", description="Ručně vytvoří anketu pro příští týden")
 @app_commands.guilds(discord.Object(id=GUILD_ID))
 async def pollnow(interaction: discord.Interaction):
-    await interaction.response.defer(ephemeral=True)
+    await interaction.response.send_message(content="", ephemeral=True, delete_after=0.1)
     await send_poll(interaction.channel)
 
 
