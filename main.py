@@ -1,11 +1,10 @@
+import os
 from datetime import datetime, timedelta
 
 import discord
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from discord import app_commands
 from discord.ext import commands
-
-import os
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -13,7 +12,6 @@ load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
 GUILD_ID = int(os.getenv("GUILD_ID"))
 CHANNEL_ID = int(os.getenv("CHANNEL_ID"))
-
 
 # ==== BOT SETUP ====
 intents = discord.Intents.default()
@@ -54,7 +52,7 @@ async def on_ready():
         print(f"Chyba při synchronizaci slash příkazů: {e}")
 
     scheduler = AsyncIOScheduler()
-    scheduler.add_job(auto_create_poll, "cron", day_of_week="mon", hour=8, minute=0)
+    scheduler.add_job(auto_create_poll, "cron", day_of_week="sat", hour=17, minute=30)
     scheduler.start()
 
 
@@ -73,6 +71,7 @@ async def auto_create_poll():
 async def pollnow(interaction: discord.Interaction):
     await interaction.response.defer(thinking=False)
     await send_poll(interaction.channel)
+    await interaction.followup.send("Anketa byla vytvořena.", ephemeral=True)
 
 
 # ==== START ====
