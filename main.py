@@ -19,15 +19,15 @@ bot = commands.Bot(command_prefix="!", intents=intents)
 
 
 # ==== GENERÁTOR DAT ====
-def generate_weekdays():
+def generate_days():
     today = datetime.today()
     next_monday = today + timedelta(days=(7 - today.weekday()))
-    return [(next_monday + timedelta(days=i)).strftime("%A %d.%m.") for i in range(5)]
+    return [(next_monday + timedelta(days=i)).strftime("%A %d.%m.") for i in range(7)]
 
 
 # ==== ODESLÁNÍ ANKETY ====
 async def send_poll(channel: discord.abc.Messageable):
-    options = generate_weekdays()
+    options = generate_days()
 
     poll = discord.Poll(
         question="Kdy můžete příští týden?",
