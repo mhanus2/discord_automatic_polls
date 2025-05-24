@@ -95,13 +95,24 @@ async def auto_create_poll():
         print("⚠️ Kanál nenalezen (CHANNEL_ID může být špatně).")
 
 
+# @bot.tree.command(name="pollnow", description="Ručně vytvoří anketu pro příští týden")
+# @app_commands.guilds(discord.Object(id=GUILD_ID))
+# async def pollnow(interaction: discord.Interaction):
+#     await interaction.response.send_message("⏳ Vytvářím anketu…", ephemeral=True)
+#     await send_poll(interaction.channel)
+#     await interaction.followup.send("✅ Anketa vytvořena.", ephemeral=False)
+
+
 @bot.tree.command(name="pollnow", description="Ručně vytvoří anketu pro příští týden")
 @app_commands.guilds(discord.Object(id=GUILD_ID))
 async def pollnow(interaction: discord.Interaction):
-    await interaction.response.send_message("⏳ Vytvářím anketu…", ephemeral=True)
-    await send_poll(interaction.channel)
-    await interaction.followup.send("✅ Anketa vytvořena.", ephemeral=False)
+    await interaction.response.defer(ephemeral=True)  # místo send_message
 
+    try:
+        await send_poll(interaction.channel)
+        await interaction.followup.send("✅ Anketa vytvořena.", ephemeral=False)
+    except Exception as e:
+        await interaction.followup.send(f"⚠️ Došlo k chybě: {e}", ephemeral=True)
 
 # ==== START ====
 if __name__ == "__main__":
