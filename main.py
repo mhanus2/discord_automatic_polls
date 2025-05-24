@@ -37,7 +37,7 @@ async def send_poll(channel: discord.abc.Messageable):
     for answer in options:
         poll.add_answer(text=answer)
 
-    await channel.send(content="@everyone", poll=poll)
+    await channel.send(poll=poll)
 
 
 # ==== ON READY ====
@@ -71,7 +71,7 @@ async def auto_create_poll():
 async def pollnow(interaction: discord.Interaction):
     await interaction.response.defer(thinking=False)
     await send_poll(interaction.channel)
-    await interaction.followup.send("Anketa byla vytvořena.", ephemeral=True)
+    await interaction.followup.send("@everyone", ephemeral=True)
 
 
 # ==== START ====
