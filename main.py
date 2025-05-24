@@ -52,15 +52,7 @@ async def on_ready():
         print(f"Chyba při synchronizaci slash příkazů: {e}")
 
     scheduler = AsyncIOScheduler()
-    now = datetime.now()
-    scheduler.add_job(
-        auto_create_poll,
-        "cron",
-        day_of_week="sat",
-        hour=now.hour,
-        minute=(now.minute + 1) % 60
-    )
-    # scheduler.add_job(auto_create_poll, "cron", day_of_week="sat", hour=17, minute=30)
+    scheduler.add_job(auto_create_poll, "cron", day_of_week="mon", hour=20)
     scheduler.start()
 
 
