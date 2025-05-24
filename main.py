@@ -79,7 +79,7 @@ def is_target_week():
     reference = date(2025, 5, 26)
     today = date.today()
     weeks_since = (today - reference).days // 7
-    return weeks_since % 2 == 0
+    return weeks_since % 2 == 1
 
 
 # ==== AUTOMATICKÁ ANKETA ====
