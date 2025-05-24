@@ -73,7 +73,6 @@ async def auto_create_poll():
 async def pollnow(interaction: discord.Interaction):
     await interaction.response.defer(thinking=False)
     await send_poll(interaction.channel)
-    await interaction.followup.send("Anketa byla vytvořena.", ephemeral=True)
 
 
 # ==== START ====
