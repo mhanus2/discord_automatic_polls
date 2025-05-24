@@ -22,7 +22,11 @@ bot = commands.Bot(command_prefix="!", intents=intents)
 def generate_days():
     today = datetime.today()
     next_monday = today + timedelta(days=(7 - today.weekday()))
-    return [(next_monday + timedelta(days=i)).strftime("%A %d.%m.") for i in range(7)]
+    include_days = [1, 2, 4, 5, 6]  # Út, St, Pá, So, Ne
+    return [
+        (next_monday + timedelta(days=i)).strftime("%A %d.%m.")
+        for i in include_days
+    ]
 
 
 # ==== ODESLÁNÍ ANKETY ====
@@ -37,7 +41,7 @@ async def send_poll(channel: discord.abc.Messageable):
     for answer in options:
         poll.add_answer(text=answer)
 
-    await channel.send(poll=poll)
+    await channel.send(content="@everyone", poll=poll)
 
 
 # ==== ON READY ====
@@ -76,13 +80,11 @@ async def auto_create_poll():
         print("⚠️ Kanál nenalezen (CHANNEL_ID může být špatně).")
 
 
-# ==== SLASH PŘÍKAZ /pollnow ====
 @bot.tree.command(name="pollnow", description="Ručně vytvoří anketu pro příští týden")
 @app_commands.guilds(discord.Object(id=GUILD_ID))
 async def pollnow(interaction: discord.Interaction):
-    await interaction.response.defer(thinking=False)
+    await interaction.response.defer(ephemeral=True)
     await send_poll(interaction.channel)
-    await interaction.followup.send("@everyone", ephemeral=True)
 
 
 # ==== START ====
