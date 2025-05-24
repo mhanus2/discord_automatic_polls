@@ -1,4 +1,5 @@
 import os
+import threading
 from datetime import datetime, timedelta, date
 
 import discord
@@ -6,6 +7,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from discord import app_commands
 from discord.ext import commands
 from dotenv import load_dotenv
+from flask import Flask
 
 load_dotenv()
 
@@ -16,6 +18,19 @@ CHANNEL_ID = int(os.getenv("CHANNEL_ID"))
 # ==== BOT SETUP ====
 intents = discord.Intents.default()
 bot = commands.Bot(command_prefix="!", intents=intents)
+
+# === Flask web server ===
+app = Flask(__name__)
+
+
+@app.route("/")
+def index():
+    return "Bot is running"
+
+
+def run_web():
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
 
 
 # ==== GENERÁTOR DAT ====
@@ -88,4 +103,6 @@ async def pollnow(interaction: discord.Interaction):
 
 
 # ==== START ====
-bot.run(TOKEN)
+if __name__ == "__main__":
+    threading.Thread(target=run_web).start()
+    bot.run(TOKEN)
